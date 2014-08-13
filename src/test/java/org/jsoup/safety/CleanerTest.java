@@ -107,7 +107,7 @@ public class CleanerTest {
 
     @Test public void preservesRelativeLinksIfConfigured() {
         String html = "<a href='/foo'>Link</a><img src='/bar'> <img src='javascript:alert()'>";
-        String clean = Jsoup.clean(html, "http://example.com/", Whitelist.basicWithImages().preserveRelativeLinks(true));
+        String clean = Jsoup.clean(html, Whitelist.basicWithImages().preserveRelativeLinks(true));
         assertEquals("<a href=\"/foo\" rel=\"nofollow\">Link</a>\n<img src=\"/bar\"> \n<img>", clean);
     }
     

@@ -10,6 +10,8 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -357,10 +359,15 @@ public class Whitelist {
 
     private boolean testValidProtocol(Element el, Attribute attr, Set<Protocol> protocols) {
         // try to resolve relative urls to abs, and optionally update the attribute so output html has abs.
-        // rels without a baseuri get removed
         String value = el.absUrl(attr.getKey());
-        if (value.length() == 0)
+        if (value.length() == 0) {
             value = attr.getValue(); // if it could not be made abs, run as-is to allow custom unknown protocols
+            if(preserveRelativeLinks)
+                try { // might be baseless and relative so try validating against http
+                    new URL(new URL("http://example.com"), value);
+                    return true;
+                } catch(MalformedURLException ex) { /* Fall-through to allow custom protocols*/ }
+        }
         if (!preserveRelativeLinks)
             attr.setValue(value);
         
