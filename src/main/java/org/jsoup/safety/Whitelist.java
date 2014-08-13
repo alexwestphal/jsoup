@@ -267,10 +267,10 @@ public class Whitelist {
      * links. By default, this is <b>false</b>: URLs will be  made absolute (e.g. start with an allowed protocol, like
      * e.g. {@code http://}.
      * <p />
-     * Note that when handling relative links, the input document must have an appropriate {@code base URI} set when
-     * parsing, so that the link's protocol can be confirmed. Regardless of the setting of the {@code preserve relative
-     * links} option, the link must be resolvable against the base URI to an allowed protocol; otherwise the attribute
-     * will be removed.
+     * Note that when handling relative links, the input document should have an appropriate {@code base URI} set when
+     * parsing, so that the link's protocol can be confirmed. If no {@code base URI} is set, {@code http} is assumed as
+     * the protocol. Regardless of the setting of the {@code preserve relative links} option, the link must be
+     * resolvable to an allowed protocol; otherwise the attribute will be removed.
      *
      * @param preserve {@code true} to allow relative links, {@code false} (default) to deny
      * @return this Whitelist, for chaining.
