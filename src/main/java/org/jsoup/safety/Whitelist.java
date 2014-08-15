@@ -326,6 +326,7 @@ public class Whitelist {
      @return this, for chaining
      */
     public Whitelist addFeature(Feature feature) {
+        Validate.notNull(feature);
 
         // Add the features allowed tags to the whitelist
         addTags(feature.tags.toArray(new String[feature.tags.size()]));
