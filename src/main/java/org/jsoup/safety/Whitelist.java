@@ -10,10 +10,7 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -317,6 +314,44 @@ public class Whitelist {
             Protocol prot = Protocol.valueOf(protocol);
             protSet.add(prot);
         }
+        return this;
+    }
+
+    /**
+     Add an allowed feature to the whitelist.
+     <p/>
+     E.g.: <code>addFeature(Feature.tables())</code>
+
+     @param feature       Feature to add
+     @return this, for chaining
+     */
+    public Whitelist addFeature(Feature feature) {
+
+        // Add the features allowed tags to the whitelist
+        addTags(feature.tags.toArray(new String[feature.tags.size()]));
+
+        // Add the features allowed attributes to the whitelist
+        for(String tag: feature.attributes.keySet()) {
+            List<String> attributes = feature.attributes.get(tag);
+            addAttributes(tag, attributes.toArray(new String[attributes.size()]));
+        }
+
+        // Add the features enforced attribute to the whitelist
+        for(String tag: feature.enforced.keySet()) {
+            Map<String,String> attributes = feature.enforced.get(tag);
+            for (String attr : attributes.keySet())
+                addEnforcedAttribute(tag, attr, attributes.get(attr));
+        }
+
+        // Add the features allowed protocols to the whitelist
+        for(String tag: feature.protocols.keySet()) {
+            Map<String,List<String>> attributes = feature.protocols.get(tag);
+            for (String attr : attributes.keySet()) {
+                List<String> protocols = attributes.get(attr);
+                addProtocols(tag, attr, protocols.toArray(new String[protocols.size()]));
+            }
+        }
+
         return this;
     }
 
