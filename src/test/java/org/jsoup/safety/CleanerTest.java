@@ -45,6 +45,12 @@ public class CleanerTest {
         String cleanHtml = Jsoup.clean(h, Whitelist.relaxed());
         assertEquals("<h1>Head</h1><table><tbody><tr><td>One</td><td>Two</td></tr></tbody></table>", TextUtil.stripNewlines(cleanHtml));
     }
+
+    @Test public void testFeature() {
+        String h = "<h1>Head</h1><table><tr><td>One<td>Two</td></tr></table>";
+        String cleanHtml = Jsoup.clean(h, Whitelist.simpleText().addFeature(Feature.tables()));
+        assertEquals("Head<table><tbody><tr><td>One</td><td>Two</td></tr></tbody></table>", TextUtil.stripNewlines(cleanHtml));
+    }
     
     @Test public void testDropComments() {
         String h = "<p>Hello<!-- no --></p>";
